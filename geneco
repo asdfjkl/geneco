@@ -34,9 +34,9 @@ l = len(out)
 for i, (eco,zobrist,text) in enumerate(out):
     # add comma only if not last line
     if i < l-1:
-        print('    {"' + eco + '", {' + zobrist + ', "' + text + '"}},')
+        print('    {"' + zobrist + '", {' + eco + ', "' + text + '"}},')
     else:
-        print('    {"' + eco + '", {' + zobrist + ', "' + text + '"}}')
+        print('    {"' + zobrist + '", {' + eco + ', "' + text + '"}}')
 print("};")
         
 
