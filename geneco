@@ -4,46 +4,39 @@ import chess
 import chess.pgn
 from StringIO import StringIO
 
+# parse data from text file by using
+# python-chess
 
 with open('eco.txt') as f:
     lines = f.readlines()
 
 out = []
-
 for line  in lines:
     if not line.strip() == '':
         eco = line[0:3]
-        # print("ECO")
-        # print eco
         split = line[3:].split('"')
         game = split[0]
         text = ""
         if len(split) > 1: 
             text = split[1]
-        # print("game")
-        # print game
-        # print("text")
-        # print text
         pgn = StringIO(game)
         pychess_game = chess.pgn.read_game(pgn)
-        # print pychess_game
         zobrist = pychess_game.end().board().zobrist_hash()
         zob_hex = hex(zobrist)
         zobrist_cpp = zob_hex[:len(zob_hex)-1] + "ULL"
         out.append((eco, zobrist_cpp, text))
 
-print("// Machine generated data. DO NOT EDIT")
-print("")
-print('#include "ecodata.h"')
-print("const struct ECOData eco_codes[] =")
-print("{")
-for (eco,zobrist,text) in out:
-    print('{"' + eco + '",' + zobrist + ',"' + text + '"},')
+# write down the parsed data into static const QMap
+# to include in Jerry
+
+print("static const QMap<unsigned long, EcoInfo> ECOINFOS { ")
+l = len(out)
+for (eco,zobrist,text),i in enumerate(out):
+    # add comma only if not last line
+    if i < l-1:
+        print('    {"' + eco + '", {' + zobrist + ',"' + text + '"}},')
+    else:
+        print('    {"' + eco + '", {' + zobrist + ',"' + text + '"}}')
 print("};")
         
 
-# f = open(filename_out, "w")
-# for line in card_list:
-#     f.write(line)
-#    f.write("\n")
-# f.close()
