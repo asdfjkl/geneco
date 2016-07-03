@@ -31,7 +31,7 @@ for line  in lines:
 
 print("static const QMap<unsigned long, EcoInfo> ECOINFOS { ")
 l = len(out)
-for (eco,zobrist,text),i in enumerate(out):
+for i, (eco,zobrist,text) in enumerate(out):
     # add comma only if not last line
     if i < l-1:
         print('    {"' + eco + '", {' + zobrist + ',"' + text + '"}},')
